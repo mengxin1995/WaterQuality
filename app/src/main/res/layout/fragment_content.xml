@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_content"
+        android:layout_width="match_parent"
+        android:background="@color/colorAccent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <RadioGroup
+        android:id="@+id/rg_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/tab_data"
+            style="@style/button_tab"
+            android:text="数据\nData" />
+
+        <RadioButton
+            android:id="@+id/tab_point"
+            style="@style/button_tab"
+            android:text="站点\nPoint" />
+
+        <RadioButton
+            android:id="@+id/tab_form"
+            style="@style/button_tab"
+            android:text="对照表\nForm" />
+
+        <RadioButton
+            android:id="@+id/tab_relative"
+            style="@style/button_tab"
+            android:text="关于\nRelative" />
+    </RadioGroup>
+</LinearLayout>
