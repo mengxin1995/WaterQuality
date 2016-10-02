@@ -10,6 +10,7 @@
 
     <style name="button_tab">
         <item name="android:button">@null</item>
+        <item name="android:textColor">@color/txt_tab_selector</item>
         <item name="android:textSize">14sp</item>
         <item name="android:background">#38393D</item>
         <item name="android:paddingTop">12dp</item>

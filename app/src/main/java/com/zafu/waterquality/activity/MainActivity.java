@@ -25,6 +25,7 @@ public class MainActivity extends SlidingFragmentActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
         setBehindContentView(R.layout.left_menu);
         mSlidingMenu = getSlidingMenu();
