@@ -3,6 +3,7 @@ package com.zafu.waterquality.base.impl;
 import android.app.Activity;
 import android.view.View;
 
+import com.zafu.waterquality.R;
 import com.zafu.waterquality.base.BasePager;
 
 /**
@@ -17,5 +18,6 @@ public class DataTab extends BasePager {
     public void initData() {
         tvTitle.setText("水质检测");
         ibMenu.setVisibility(View.INVISIBLE);
+        mBaseView.setBackgroundResource(R.drawable.bc);
     }
 }

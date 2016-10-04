@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:relative="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:src="@drawable/logo2"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <com.zafu.waterquality.view.RelativeView
+            android:paddingTop="20dp"
+            android:layout_width="match_parent"
+            relative:attr1="当前版本"
+            relative:attr2="已最新版本"
+            android:layout_height="60dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.zafu.waterquality.view.RelativeView
+            android:paddingTop="20dp"
+            android:layout_width="match_parent"
+            relative:attr1="数据来源"
+            relative:attr2="浙江农林大学"
+            android:layout_height="60dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.zafu.waterquality.view.RelativeView
+            android:paddingTop="20dp"
+            android:layout_width="match_parent"
+            relative:attr1="技术支持"
+            relative:attr2="浙江农林大学"
+            android:layout_height="60dp"/>
+    </RelativeLayout>
+</LinearLayout>
