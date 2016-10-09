@@ -18,6 +18,7 @@ public class DataTab extends BasePager {
     public void initData() {
         tvTitle.setText("水质检测");
         ibMenu.setVisibility(View.INVISIBLE);
-        mBaseView.setBackgroundResource(R.drawable.bc);
+        View view = View.inflate(mActivity, R.layout.view_data_tab, null);
+        flContent.addView(view);
     }
 }
