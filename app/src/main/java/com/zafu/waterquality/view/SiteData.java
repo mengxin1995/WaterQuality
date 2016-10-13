@@ -114,7 +114,7 @@ public class SiteData extends View{
                     connection.setReadTimeout(8000) ;
                     //下面是读取，可以用connection带的方法，获取输入流
                     InputStream inStream = connection.getInputStream() ;
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(inStream,"GB2312")) ;
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inStream)) ;
                     points.clear() ;
                     pointCount = 1 ;
                     String line = null;

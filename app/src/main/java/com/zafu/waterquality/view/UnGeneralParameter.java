@@ -181,7 +181,7 @@ public class UnGeneralParameter extends View {
                     connection.setReadTimeout(8000) ;
                     //下面是读取，可以用connection带的方法，获取输入流
                     InputStream inStream = connection.getInputStream() ;
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(inStream,"GB2312")) ;
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inStream)) ;
 
                     String line = null;
                     int count = 0 ;
@@ -191,7 +191,7 @@ public class UnGeneralParameter extends View {
                     Log.i("xValue", elemX+"") ;
                     double everY = viewHeight*0.718/36 ;
                     Log.i("asd", everY+"") ;
-                    while((line=reader.readLine())!=null && count <24*12){
+                    while((line=reader.readLine())!=null && count <=24*12){
                         if(count == 0)
                         {
                             count++;
