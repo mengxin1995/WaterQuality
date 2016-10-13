@@ -10,6 +10,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import com.zafu.waterquality.global.GlobalConstants;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,12 +26,20 @@ import java.util.TimerTask;
  */
 public class GeneralParameter extends View{
 
+    private static final String TAG = "GeneralParameter";
     private Paint paint ;
     private Paint greenLinePaint ;
     private Paint yellowLinePaint ;
     private int viewWidth ;
     private int viewHeight ;
-    private Handler handler ;
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg){
+            //canvas.drawText(str.toString(), 340, 440, paint);
+            //paint.setStrokeWidth((float) 6.0);
+            invalidate() ;
+        }
+    };;
     private double phValue ;
     private double tempValue ;
     private double oxyGasValue ;
@@ -67,14 +77,6 @@ public class GeneralParameter extends View{
 
     @Override
     protected void onDraw(Canvas canvas){
-        handler = new Handler(){
-            @Override
-            public void handleMessage(Message msg){
-                //canvas.drawText(str.toString(), 340, 440, paint);
-                //paint.setStrokeWidth((float) 6.0);
-                invalidate() ;
-            }
-        };
         //得到长宽
         viewWidth = getWidth() ;
         viewHeight = getHeight() ;
@@ -124,7 +126,7 @@ public class GeneralParameter extends View{
             public void run() {
                 // TODO Auto-generated method stub
                 try {
-                    URL url =new URL("http://120.55.67.135/1.csv") ;
+                    URL url =new URL(GlobalConstants.SITE_URL) ;
                     HttpURLConnection connection =(HttpURLConnection) url.openConnection() ;
                     //服务器的常用的两个方法,post,get
                     connection.setRequestMethod("GET") ;
@@ -133,25 +135,27 @@ public class GeneralParameter extends View{
                     connection.setReadTimeout(8000) ;
                     //下面是读取，可以用connection带的方法，获取输入流
                     InputStream inStream = connection.getInputStream() ;
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(inStream,"GB2312")) ;
-
-                    String line = null;
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inStream)) ;
+                    Log.i(TAG, "我到了");
+                    String line = "";
                     int count = 0 ;
                     double phCount =0 ,tempCount = 0 ,oxyGasCount = 0 ;
-                    while((line=reader.readLine())!=null && count <24*12){
-                        System.out.println(line);
+                    while((line=reader.readLine())!=null && count <= 24*12){
+                        if(count == 0)
+                        {
+                            count++;
+                            continue;
+                        }
+                        Log.i(TAG, line);
                         String item[] = line.split(",");
                         count++ ;
                         oxyGasCount += Double.parseDouble(item[1]) ;
                         phCount += Double.parseDouble(item[3]) ;
                         tempCount += Double.parseDouble(item[4]) ;
-
                     }
                     oxyGasValue = oxyGasCount/count ;
                     phValue = phCount/count ;
                     tempValue = tempCount/count ;
-
-                    Message msg = new Message() ;
                     handler.sendEmptyMessage(0) ;
                 } catch (Exception e) {
                     // TODO: handle exception

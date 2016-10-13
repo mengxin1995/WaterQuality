@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.zafu.waterquality.domain.DataPoint;
+import com.zafu.waterquality.global.GlobalConstants;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 public class SiteData extends View{
 
     private Handler handler  ;
-    private String strUrl = "http://120.55.67.135/point.csv" ;
+    private String strUrl = GlobalConstants.SITE_URL;
     private Paint warPaint ;
     private Paint paint ;
     private int pointCount = 1 ;
@@ -117,8 +118,13 @@ public class SiteData extends View{
                     points.clear() ;
                     pointCount = 1 ;
                     String line = null;
-
+                    int count = 0;
                     while((line=reader.readLine())!=null){
+                        if(count == 0)
+                        {
+                            count++;
+                            continue;
+                        }
                         String item[] = line.split(",");
                         DataPoint elem = new DataPoint() ;
                         elem.setPonitName( item[0]) ;

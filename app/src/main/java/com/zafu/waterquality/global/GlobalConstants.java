@@ -14,4 +14,9 @@ public class GlobalConstants {
      * 主菜单的标记
      */
     public static final String TAG_CONTENT = "tag_content";
+
+    /**
+     * 站点ｕｒｌ
+     */
+    public static final String SITE_URL = "http://octamz5er.bkt.clouddn.com/12345.csv";
 }

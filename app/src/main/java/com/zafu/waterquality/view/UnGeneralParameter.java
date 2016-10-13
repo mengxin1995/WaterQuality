@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.zafu.waterquality.domain.MyPoint;
+import com.zafu.waterquality.global.GlobalConstants;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -171,7 +172,7 @@ public class UnGeneralParameter extends View {
             public void run() {
                 // TODO Auto-generated method stub
                 try {
-                    URL url =new URL("http://120.55.67.135/1.csv") ;
+                    URL url =new URL(GlobalConstants.SITE_URL) ;
                     HttpURLConnection connection =(HttpURLConnection) url.openConnection() ;
                     //服务器的常用的两个方法,post,get
                     connection.setRequestMethod("GET") ;
@@ -191,6 +192,11 @@ public class UnGeneralParameter extends View {
                     double everY = viewHeight*0.718/36 ;
                     Log.i("asd", everY+"") ;
                     while((line=reader.readLine())!=null && count <24*12){
+                        if(count == 0)
+                        {
+                            count++;
+                            continue;
+                        }
                         System.out.println(line);
                         String item[] = line.split(",");
 
@@ -204,7 +210,6 @@ public class UnGeneralParameter extends View {
 
                         count++ ;
                     }
-                    Message msg = new Message() ;
                     handler.sendEmptyMessage(0) ;
                 } catch (Exception e) {
                     // TODO: handle exception

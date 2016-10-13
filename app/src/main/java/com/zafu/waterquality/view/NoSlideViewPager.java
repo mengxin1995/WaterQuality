@@ -18,6 +18,11 @@ public class NoSlideViewPager extends ViewPager {
     }
 
     @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return false;// 不拦截子控件的事件
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent ev) {
         return true;
     }
