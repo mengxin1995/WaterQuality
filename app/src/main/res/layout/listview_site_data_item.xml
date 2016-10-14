@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_red_dark"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_col1"
+            style="@style/lv_site_data_item"
+            android:text="浙江农大" />
+
+        <TextView
+            android:id="@+id/tv_col2"
+            android:text=""
+            style="@style/lv_site_data_item" />
+
+        <TextView
+            android:id="@+id/tv_col3"
+            style="@style/lv_site_data_item" />
+
+        <TextView
+            android:id="@+id/tv_col4"
+            style="@style/lv_site_data_item" />
+
+        <TextView
+            android:id="@+id/tv_col5"
+            style="@style/lv_site_data_item" />
+
+        <TextView
+            android:id="@+id/tv_col6"
+            style="@style/lv_site_data_item" />
+    </LinearLayout>
+</LinearLayout>

@@ -31,7 +31,16 @@ public class UnGeneralParameter extends View {
     ArrayList<Point> dataChangePoint = new ArrayList<Point>() ;
     private Paint paint;
     private Paint textPaint ;
-    private Handler handler ;
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg){
+            //changePoint() ;
+            //canvas.drawText(str.toString(), 340, 440, paint);
+            paint.setStrokeWidth((float) 6.0);
+            invalidate() ;
+            Log.i("XValue", "VIEWoneINit") ;
+        }
+    };;
     private Timer mTimer ;
     private TimerTask mTimerTask ;
     private int viewWidth ;
@@ -77,16 +86,6 @@ public class UnGeneralParameter extends View {
 
         //int viewHeight = getHeight() ;
         //Log.i("viewWidValue", viewWidth+"-"+getWidth()) ;
-        handler = new Handler(){
-            @Override
-            public void handleMessage(Message msg){
-                //changePoint() ;
-                //canvas.drawText(str.toString(), 340, 440, paint);
-                paint.setStrokeWidth((float) 6.0);
-                invalidate() ;
-                Log.i("XValue", "VIEWoneINit") ;
-            }
-        };
 
         paint.setColor(Color.WHITE) ;
         paint.setTextSize(viewWidth/22) ;

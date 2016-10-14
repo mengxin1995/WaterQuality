@@ -1,43 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/sl_data"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="vertical"
-    android:background="@drawable/bc">
+    android:background="@drawable/bc"
+    android:scrollbars="vertical">
 
-    <LinearLayout
+    <ListView
+        android:id="@+id/lv_site_data"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <com.zafu.waterquality.view.GeneralParameter
-                android:layout_width="match_parent"
-                android:layout_marginTop="25dp"
-                android:layout_height="280dp"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-            <com.zafu.waterquality.view.UnGeneralParameter
-                android:layout_width="match_parent"
-                android:layout_marginTop="25dp"
-                android:layout_height="280dp"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-            <com.zafu.waterquality.view.SiteData
-                android:id="@+id/VIEWFOUR_ID"
-                android:layout_width="match_parent"
-                android:layout_marginTop="25dp"
-                android:layout_height="wrap_content"/>
-
-        </RelativeLayout>
-    </LinearLayout>
-</ScrollView>
+        android:layout_height="match_parent" />
+</LinearLayout>
