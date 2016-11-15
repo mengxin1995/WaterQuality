@@ -47,7 +47,7 @@ public class ContentFragment extends BaseFragment{
         //先加载一页数据
         mPagers.get(0).initData();
         vpContent.setAdapter(new VpContent());
-
+        vpContent.setOffscreenPageLimit(2);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -78,9 +78,17 @@ public class ContentFragment extends BaseFragment{
 
             @Override
             public void onPageSelected(int position) {
-                BasePager pager = mPagers.get(position);
-                pager.initData();
-                LogUtil.getInstance().debug("当前初始化页面" + position);
+//                BasePager pager = mPagers.get(position);
+//                if(position == 1) {
+//                    PointTab tab = (PointTab) pager;
+//                    System.out.println("temp : " + tab.temp);
+//                    if(tab.temp == 0)
+//                        pager.initData();
+//                    tab.temp = 1;
+//                }else{
+//                    pager.initData();
+//                }
+//                LogUtil.getInstance().debug("当前初始化页面" + position);
             }
 
             @Override
@@ -119,6 +127,8 @@ public class ContentFragment extends BaseFragment{
         public Object instantiateItem(ViewGroup container, int position) {
             BasePager Pager = mPagers.get(position);
             View view = Pager.mBaseView;
+            Pager.initData();
+
             container.addView(view);
             LogUtil.getInstance().debug("加载viewpager的页码"+position);
             return view;
@@ -126,6 +136,7 @@ public class ContentFragment extends BaseFragment{
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
+            System.out.println("destroyItem " + position);
             container.removeView((View) object);
         }
     }

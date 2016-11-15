@@ -16,6 +16,7 @@ public class Relative extends BasePager {
 
     @Override
     public void initData() {
+        System.out.println("关于我们");
         tvTitle.setText("关于我们");
         ibMenu.setVisibility(View.INVISIBLE);
         View view = View.inflate(mActivity, R.layout.view_relative, null);

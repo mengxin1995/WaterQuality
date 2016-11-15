@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 24
@@ -25,4 +26,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile project(':SlidingMenuLibrary')
     compile 'com.google.code.gson:gson:2.2.4'
+    compile files('libs/baidumapapi_cloud_v4_0_0.jar')
+    compile files('libs/locSDK_6.13.jar')
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
 }

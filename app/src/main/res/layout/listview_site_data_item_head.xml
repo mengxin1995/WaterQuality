@@ -6,6 +6,12 @@
     <com.zafu.waterquality.view.LvSiteDataHead
         android:layout_marginTop="25dp"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="50dp"
         />
+    <TextView
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
 </LinearLayout>

@@ -44,7 +44,6 @@ public class LvSiteDataHead extends View {
 
         mPaint.setColor(Color.WHITE);
         mPaint.setTextSize(width / 22);
-        canvas.drawText("站点数据", (float) (width * 0.05), 60, mPaint);
-        canvas.drawLine((float) (width * 0.05), 80, (float) (width * 0.92), 80, mPaint);
+        canvas.drawText("站点数据", (float) (width * 0.08), (float) (height * 0.75), mPaint);
     }
 }

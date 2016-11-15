@@ -146,7 +146,7 @@ public class GeneralParameter extends View{
                             count++;
                             continue;
                         }
-                        Log.i(TAG, line);
+                        //Log.i(TAG, line);
                         String item[] = line.split(",");
                         count++ ;
                         oxyGasCount += Double.parseDouble(item[1]) ;

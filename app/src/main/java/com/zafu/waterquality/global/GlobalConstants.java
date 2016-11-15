@@ -18,5 +18,5 @@ public class GlobalConstants {
     /**
      * 站点ｕｒｌ
      */
-    public static final String SITE_URL = "http://octamz5er.bkt.clouddn.com/12345.csv";
+    public static final String SITE_URL = "http://115.28.222.130/12345.csv";
 }

@@ -2,38 +2,106 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_red_dark"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <LinearLayout
+        android:background="#606E7078"
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_col_name1"
+            style="@style/lv_site_data_item"
+            android:layout_weight="3"
+            android:text="ZAFU" />
+
+        <TextView
+            android:id="@+id/tv_col_name2"
+            android:text="浊度"
+            android:layout_weight="1"
+            style="@style/lv_site_data_item" />
+
+        <TextView
+            android:id="@+id/tv_col_name3"
+            android:text="PH值"
+            android:layout_weight="1"
+            style="@style/lv_site_data_item" />
+
+        <TextView
+            android:id="@+id/tv_col_name4"
+            android:text="电导率"
+            android:layout_weight="1"
+            style="@style/lv_site_data_item" />
+
+        <TextView
+            android:id="@+id/tv_col_name5"
+            android:text="溶解氧"
+            android:layout_weight="1"
+            style="@style/lv_site_data_item" />
+
+        <TextView
+            android:id="@+id/tv_col_name6"
+            android:text="水温"
+            android:layout_weight="1"
+            style="@style/lv_site_data_item" />
+
+        <TextView
+            android:id="@+id/tv_col_name7"
+            android:text="氨氮"
+            android:layout_weight="1"
+            style="@style/lv_site_data_item" />
+        <TextView
+            android:id="@+id/tv_col_name8"
+            android:text="水位"
+            android:layout_weight="1"
+            style="@style/lv_site_data_item" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:background="#606E7078"
         android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tv_col1"
+            android:layout_weight="3"
             style="@style/lv_site_data_item"
             android:text="浙江农大" />
 
         <TextView
             android:id="@+id/tv_col2"
             android:text=""
+            android:layout_weight="1"
             style="@style/lv_site_data_item" />
 
         <TextView
             android:id="@+id/tv_col3"
+            android:layout_weight="1"
             style="@style/lv_site_data_item" />
 
         <TextView
             android:id="@+id/tv_col4"
+            android:layout_weight="1"
             style="@style/lv_site_data_item" />
 
         <TextView
             android:id="@+id/tv_col5"
+            android:layout_weight="1"
             style="@style/lv_site_data_item" />
 
         <TextView
             android:id="@+id/tv_col6"
+            android:layout_weight="1"
+            style="@style/lv_site_data_item" />
+        <TextView
+            android:id="@+id/tv_col7"
+            android:layout_weight="1"
+            style="@style/lv_site_data_item" />
+        <TextView
+            android:id="@+id/tv_col8"
+            android:layout_weight="1"
             style="@style/lv_site_data_item" />
     </LinearLayout>
 </LinearLayout>

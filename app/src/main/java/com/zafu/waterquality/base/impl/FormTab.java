@@ -16,6 +16,7 @@ public class FormTab extends BasePager {
 
     @Override
     public void initData() {
+        System.out.println("水质数据说明");
         tvTitle.setText("水质数据说明");
         ibMenu.setVisibility(View.INVISIBLE);
         View view = View.inflate(mActivity, R.layout.view_form_tab, null);

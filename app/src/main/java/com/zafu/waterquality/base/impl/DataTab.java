@@ -6,14 +6,15 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.zafu.waterquality.R;
 import com.zafu.waterquality.base.BasePager;
 import com.zafu.waterquality.domain.DataPoint;
 import com.zafu.waterquality.global.GlobalConstants;
+import com.zafu.waterquality.view.RefreshListView;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -28,19 +29,13 @@ import java.util.ArrayList;
 public class DataTab extends BasePager {
 
     private ViewHolder mHolder;
-    private ListView mLvSiteData;
+    private RefreshListView mLvSiteData;
     private SiteDataAdapter mSiteDataAdapter;
-    private ArrayList<DataPoint> mSiteDataLists = new ArrayList<DataPoint>() ;
-    private Handler handler = new Handler(){
+    private ArrayList<DataPoint> mSiteDataLists = new ArrayList<DataPoint>();
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if(mSiteDataAdapter != null){
-//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)
-//                        mLvSiteData.getLayoutParams();
-//                View view = View.inflate(mActivity, R.layout.listview_site_data_item, null);
-
-                mSiteDataAdapter.notifyDataSetChanged();
-            }
+            mLvSiteData.refreshComplete(true);
         }
     };
 
@@ -50,21 +45,37 @@ public class DataTab extends BasePager {
 
     @Override
     public void initData() {
+        System.out.println("水质检测");
         tvTitle.setText("水质检测");
         ibMenu.setVisibility(View.INVISIBLE);
         View view = View.inflate(mActivity, R.layout.view_data_tab, null);
-        mLvSiteData = (ListView) view.findViewById(R.id.lv_site_data);
+        mLvSiteData = (RefreshListView) view.findViewById(R.id.lv_site_data);
+
+        //设置外边距
+
 
         //获取数据
         getDataFromService();
+        initLvRefresh();
 
         mSiteDataAdapter = new SiteDataAdapter();
-        mLvSiteData.setAdapter(mSiteDataAdapter);
 
         mLvSiteData.addHeaderView(View.inflate(mActivity, R.layout.view_general_parameter, null));
         mLvSiteData.addHeaderView(View.inflate(mActivity, R.layout.view_ungeneral_parameter, null));
         mLvSiteData.addHeaderView(View.inflate(mActivity, R.layout.listview_site_data_item_head, null));
+        mLvSiteData.setAdapter(mSiteDataAdapter);
         flContent.addView(view);
+    }
+
+    private void initLvRefresh() {
+        mLvSiteData.setOnRefreshListener(new RefreshListView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+//                mLvSiteData.refreshComplete(true);
+                handler.sendEmptyMessageDelayed(111, 2000);
+            }
+        });
     }
 
     private void getDataFromService() {
@@ -72,51 +83,48 @@ public class DataTab extends BasePager {
             @Override
             public void run() {
                 try {
-                    URL url =new URL(GlobalConstants.SITE_URL) ;
-                    HttpURLConnection connection =(HttpURLConnection) url.openConnection() ;
+                    URL url = new URL(GlobalConstants.SITE_URL);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     //服务器的常用的两个方法,post,get
-                    connection.setRequestMethod("GET") ;
+                    connection.setRequestMethod("GET");
                     //链接超时,读取超时，根据自己情况定
-                    connection.setConnectTimeout(8000) ;
-                    connection.setReadTimeout(8000) ;
+                    connection.setConnectTimeout(8000);
+                    connection.setReadTimeout(8000);
                     //下面是读取，可以用connection带的方法，获取输入流
-                    InputStream inStream = connection.getInputStream() ;
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(inStream)) ;
-                    mSiteDataLists.clear() ;
+                    InputStream inStream = connection.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inStream));
+                    mSiteDataLists.clear();
                     String line = null;
                     int count = 0;
-                    while((line=reader.readLine())!=null){
-                        if(count == 0)
-                        {
+                    while ((line = reader.readLine()) != null) {
+                        if (count == 0) {
                             count++;
                             continue;
                         }
                         String item[] = line.split(",");
-                        DataPoint elem = new DataPoint() ;
-                        elem.setPonitName( item[0]) ;
-                        Log.i("name", item[0]) ;
-                        elem.setOxgasValue(Double.parseDouble(item[1])) ;
-                        elem.setPhValue(Double.parseDouble(item[3])) ;
-                        elem.setTempVale(Double.parseDouble(item[4])) ;
-                        elem.setnValue(Double.parseDouble(item[2])*1000) ;
-                        elem.setZhouValue(Double.parseDouble(item[5])) ;
-                        mSiteDataLists.add(elem) ;
+                        DataPoint elem = new DataPoint();
+                        elem.setPonitName(item[0]);
+                        Log.i("name", item[0]);
+                        elem.setOxgasValue(Double.parseDouble(item[1]));
+                        elem.setPhValue(Double.parseDouble(item[3]));
+                        elem.setTempVale(Double.parseDouble(item[4]));
+                        elem.setnValue(Double.parseDouble(item[2]) * 1000);
+                        elem.setZhouValue(Double.parseDouble(item[5]));
+                        mSiteDataLists.add(elem);
                     }
-                    handler.sendEmptyMessage(0);
                     connection.disconnect();
-                }
-                catch (Exception e) {
-                    e.printStackTrace() ;
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }).start();
     }
 
 
-    private class SiteDataAdapter extends BaseAdapter{
+    private class SiteDataAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return mSiteDataLists.size();
+            return 2;
         }
 
         @Override
@@ -131,8 +139,10 @@ public class DataTab extends BasePager {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if(convertView == null){
+            if (convertView == null) {
                 convertView = View.inflate(mActivity, R.layout.listview_site_data_item, null);
+                //设置内边距
+                setPadding(convertView);
                 mHolder = new ViewHolder();
                 mHolder.tv_col1 = (TextView) convertView.findViewById(R.id.tv_col1);
                 mHolder.tv_col2 = (TextView) convertView.findViewById(R.id.tv_col2);
@@ -141,7 +151,7 @@ public class DataTab extends BasePager {
                 mHolder.tv_col5 = (TextView) convertView.findViewById(R.id.tv_col5);
                 mHolder.tv_col6 = (TextView) convertView.findViewById(R.id.tv_col6);
                 convertView.setTag(mHolder);
-            }else{
+            } else {
                 mHolder = (ViewHolder) convertView.getTag();
             }
             DataPoint dataPoint = mSiteDataLists.get(position);
@@ -155,7 +165,14 @@ public class DataTab extends BasePager {
         }
     }
 
-    static class ViewHolder{
+    private void setPadding(View convertView) {
+        WindowManager wm = mActivity.getWindowManager();
+        int width = wm.getDefaultDisplay().getWidth();
+        int padding = (int) (width * 0.05);
+        convertView.setPadding(padding, 0, padding, 0);
+    }
+
+    static class ViewHolder {
         public TextView tv_col1;
         public TextView tv_col2;
         public TextView tv_col3;
