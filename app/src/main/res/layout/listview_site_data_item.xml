@@ -7,13 +7,14 @@
     <LinearLayout
         android:background="#606E7078"
         android:padding="5dp"
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tv_col_name1"
             style="@style/lv_site_data_item"
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:text="ZAFU" />
 
         <TextView
@@ -61,12 +62,13 @@
     <LinearLayout
         android:background="#606E7078"
         android:padding="5dp"
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tv_col1"
-            android:layout_weight="3"
+            android:layout_weight="2"
             style="@style/lv_site_data_item"
             android:text="浙江农大" />
 

@@ -8,8 +8,15 @@
         <attr name="content4" format="string"/>
         <attr name="select" format="integer"/>
     </declare-styleable>
+
     <declare-styleable name="relativeView">
         <attr name="attr1" format="string"/>
         <attr name="attr2" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="BlurredView">
+        <attr name="src" format="reference"/>
+        <attr name="move" format="boolean"/>
+        <attr name="disableBlurred" format="boolean"/>
     </declare-styleable>
 </resources>

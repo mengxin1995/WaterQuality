@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.zafu.waterquality.R;
 import com.zafu.waterquality.base.BasePager;
 import com.zafu.waterquality.domain.DataPoint;
 import com.zafu.waterquality.global.GlobalConstants;
+import com.zafu.waterquality.utils.blurredview.BlurredView;
 import com.zafu.waterquality.view.RefreshListView;
 
 import java.io.BufferedReader;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
  */
 public class DataTab extends BasePager {
 
+    private static final String TAG = "DataTab";
     private ViewHolder mHolder;
     private RefreshListView mLvSiteData;
     private SiteDataAdapter mSiteDataAdapter;
@@ -38,6 +41,7 @@ public class DataTab extends BasePager {
             mLvSiteData.refreshComplete(true);
         }
     };
+    private BlurredView mBlurredView;
 
     public DataTab(Activity activity) {
         super(activity);
@@ -50,12 +54,14 @@ public class DataTab extends BasePager {
         ibMenu.setVisibility(View.INVISIBLE);
         View view = View.inflate(mActivity, R.layout.view_data_tab, null);
         mLvSiteData = (RefreshListView) view.findViewById(R.id.lv_site_data);
+        mBlurredView = (BlurredView) view.findViewById(R.id.yahooweather_blurredview);
 
         //设置外边距
 
 
         //获取数据
         getDataFromService();
+        //刷新做什么
         initLvRefresh();
 
         mSiteDataAdapter = new SiteDataAdapter();
@@ -64,6 +70,25 @@ public class DataTab extends BasePager {
         mLvSiteData.addHeaderView(View.inflate(mActivity, R.layout.view_ungeneral_parameter, null));
         mLvSiteData.addHeaderView(View.inflate(mActivity, R.layout.listview_site_data_item_head, null));
         mLvSiteData.setAdapter(mSiteDataAdapter);
+
+        mLvSiteData.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                Log.d(TAG, "firstVisibleItem : " + firstVisibleItem);
+                Log.d(TAG, "visibleItemCount : " + visibleItemCount);
+                Log.d(TAG, "totalItemCount : " + totalItemCount);
+                if(firstVisibleItem == 1){
+                    mBlurredView.setBlurredLevel(100);
+                }else{
+                    mBlurredView.setBlurredLevel(0);
+                }
+            }
+        });
         flContent.addView(view);
     }
 
@@ -77,6 +102,7 @@ public class DataTab extends BasePager {
             }
         });
     }
+
 
     private void getDataFromService() {
         new Thread(new Runnable() {
@@ -144,23 +170,47 @@ public class DataTab extends BasePager {
                 //设置内边距
                 setPadding(convertView);
                 mHolder = new ViewHolder();
+                mHolder.tv_col_name1 = (TextView) convertView.findViewById(R.id.tv_col_name1);
+                mHolder.tv_col_name2 = (TextView) convertView.findViewById(R.id.tv_col_name2);
+                mHolder.tv_col_name3 = (TextView) convertView.findViewById(R.id.tv_col_name3);
+                mHolder.tv_col_name4 = (TextView) convertView.findViewById(R.id.tv_col_name4);
+                mHolder.tv_col_name5 = (TextView) convertView.findViewById(R.id.tv_col_name5);
+                mHolder.tv_col_name6 = (TextView) convertView.findViewById(R.id.tv_col_name6);
+                mHolder.tv_col_name7 = (TextView) convertView.findViewById(R.id.tv_col_name7);
+                mHolder.tv_col_name8 = (TextView) convertView.findViewById(R.id.tv_col_name8);
+
                 mHolder.tv_col1 = (TextView) convertView.findViewById(R.id.tv_col1);
                 mHolder.tv_col2 = (TextView) convertView.findViewById(R.id.tv_col2);
                 mHolder.tv_col3 = (TextView) convertView.findViewById(R.id.tv_col3);
                 mHolder.tv_col4 = (TextView) convertView.findViewById(R.id.tv_col4);
                 mHolder.tv_col5 = (TextView) convertView.findViewById(R.id.tv_col5);
                 mHolder.tv_col6 = (TextView) convertView.findViewById(R.id.tv_col6);
+                mHolder.tv_col7 = (TextView) convertView.findViewById(R.id.tv_col7);
+                mHolder.tv_col8 = (TextView) convertView.findViewById(R.id.tv_col8);
                 convertView.setTag(mHolder);
             } else {
                 mHolder = (ViewHolder) convertView.getTag();
             }
+
             DataPoint dataPoint = mSiteDataLists.get(position);
-            mHolder.tv_col1.setText(dataPoint.getPonitName() + "");
+
+            mHolder.tv_col_name1.setText("ZAFU");
+            mHolder.tv_col_name2.setText("THM");
+            mHolder.tv_col_name3.setText("PH");
+            mHolder.tv_col_name4.setText("CTD");
+            mHolder.tv_col_name5.setText("O2");
+           // mHolder.tv_col_name6.setText("WTMP");
+           // mHolder.tv_col_name7.setText("WTMP");
+          //  mHolder.tv_col_name8.setText("WTMP");
+
+            //mHolder.tv_col1.setText("");
             mHolder.tv_col2.setText(dataPoint.getnValue() + "");
             mHolder.tv_col3.setText(dataPoint.getOxgasValue() + "");
             mHolder.tv_col4.setText(dataPoint.getPhValue() + "");
             mHolder.tv_col5.setText(dataPoint.getTempVale() + "");
             mHolder.tv_col6.setText(dataPoint.getZhouValue() + "");
+            mHolder.tv_col7.setText(dataPoint.getZhouValue() + "");
+            mHolder.tv_col8.setText(dataPoint.getZhouValue() + "");
             return convertView;
         }
     }
@@ -179,5 +229,15 @@ public class DataTab extends BasePager {
         public TextView tv_col4;
         public TextView tv_col5;
         public TextView tv_col6;
+        public TextView tv_col7;
+        public TextView tv_col8;
+        public TextView tv_col_name1;
+        public TextView tv_col_name2;
+        public TextView tv_col_name3;
+        public TextView tv_col_name4;
+        public TextView tv_col_name5;
+        public TextView tv_col_name6;
+        public TextView tv_col_name7;
+        public TextView tv_col_name8;
     }
 }
