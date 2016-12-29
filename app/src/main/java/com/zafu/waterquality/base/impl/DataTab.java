@@ -56,9 +56,6 @@ public class DataTab extends BasePager {
         mLvSiteData = (RefreshListView) view.findViewById(R.id.lv_site_data);
         mBlurredView = (BlurredView) view.findViewById(R.id.yahooweather_blurredview);
 
-        //设置外边距
-
-
         //获取数据
         getDataFromService();
         //刷新做什么
@@ -79,9 +76,6 @@ public class DataTab extends BasePager {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                Log.d(TAG, "firstVisibleItem : " + firstVisibleItem);
-                Log.d(TAG, "visibleItemCount : " + visibleItemCount);
-                Log.d(TAG, "totalItemCount : " + totalItemCount);
                 if(firstVisibleItem == 1){
                     mBlurredView.setBlurredLevel(100);
                 }else{
@@ -92,17 +86,16 @@ public class DataTab extends BasePager {
         flContent.addView(view);
     }
 
+
+
     private void initLvRefresh() {
         mLvSiteData.setOnRefreshListener(new RefreshListView.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
-//                mLvSiteData.refreshComplete(true);
                 handler.sendEmptyMessageDelayed(111, 2000);
             }
         });
     }
-
 
     private void getDataFromService() {
         new Thread(new Runnable() {
@@ -146,8 +139,8 @@ public class DataTab extends BasePager {
         }).start();
     }
 
-
     private class SiteDataAdapter extends BaseAdapter {
+
         @Override
         public int getCount() {
             return 2;
@@ -162,7 +155,6 @@ public class DataTab extends BasePager {
         public long getItemId(int position) {
             return position;
         }
-
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
@@ -213,6 +205,7 @@ public class DataTab extends BasePager {
             mHolder.tv_col8.setText(dataPoint.getZhouValue() + "");
             return convertView;
         }
+
     }
 
     private void setPadding(View convertView) {
@@ -221,7 +214,6 @@ public class DataTab extends BasePager {
         int padding = (int) (width * 0.05);
         convertView.setPadding(padding, 0, padding, 0);
     }
-
     static class ViewHolder {
         public TextView tv_col1;
         public TextView tv_col2;
@@ -239,5 +231,6 @@ public class DataTab extends BasePager {
         public TextView tv_col_name6;
         public TextView tv_col_name7;
         public TextView tv_col_name8;
+
     }
 }

@@ -42,7 +42,7 @@ public class PointTab extends BasePager {
     @Override
     public void initData() {
         System.out.println("站点信息");
-        tvTitle.setText("站点信息");
+        tvTitle.setText("站点信息(点击切换)");
         tvTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +71,7 @@ public class PointTab extends BasePager {
         mMapView = (MapView) view.findViewById(R.id.bmapView);
         baiduMap = mMapView.getMap();
 
-        baiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
+        baiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
         baiduMap.setTrafficEnabled(false);
 
         //设置地图中心点为浙江农林大学

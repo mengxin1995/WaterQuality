@@ -22,4 +22,16 @@ public class SpUtil {
                 Context.MODE_PRIVATE);
         sp.edit().putBoolean(key, value).commit();
     }
+
+    public static String getString(Context context, String key, String defValue) {
+        SharedPreferences sp = context.getSharedPreferences(GlobalConstants.CONFIG,
+                Context.MODE_PRIVATE);
+        return sp.getString(key, defValue);
+    }
+
+    public static void setString(Context context, String key, String value){
+        SharedPreferences sp = context.getSharedPreferences(GlobalConstants.CONFIG,
+                Context.MODE_PRIVATE);
+        sp.edit().putString(key, value).commit();
+    }
 }
