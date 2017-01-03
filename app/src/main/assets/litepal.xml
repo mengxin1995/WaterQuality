@@ -1,0 +1,12 @@
+<litepal>
+    <dbname value="cool_weather"/>
+
+    <version value="1"/>
+
+    <list>
+        <mapping class="com.zafu.waterquality.db.Province"/>
+        <mapping class="com.zafu.waterquality.db.City"/>
+        <mapping class="com.zafu.waterquality.db.County"/>
+    </list>
+
+</litepal>

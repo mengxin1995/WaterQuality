@@ -6,6 +6,8 @@ import android.os.Handler;
 
 import com.baidu.mapapi.SDKInitializer;
 
+import org.litepal.LitePalApplication;
+
 /**
  * Created by mengxin on 16-10-26.
  */
@@ -22,6 +24,7 @@ public class WaterQualityApplication extends Application{
         context = getApplicationContext();
         handler = new Handler();
         mainThreadId = android.os.Process.myTid();
+        LitePalApplication.initialize(context);
     }
 
     public static Context getContext() {

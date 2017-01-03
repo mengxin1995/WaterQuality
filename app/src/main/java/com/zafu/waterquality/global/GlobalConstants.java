@@ -22,4 +22,5 @@ public class GlobalConstants {
     public static final String PROVINCE = "province";
     public static final String CITY = "city";
     public static final String DISTRICT = "district";
+    public static final String PROVINCE_URL = "http://guolin.tech/api/china";
 }

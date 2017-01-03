@@ -15,6 +15,8 @@ import com.zafu.waterquality.R;
 import com.zafu.waterquality.base.BasePager;
 import com.zafu.waterquality.domain.DataPoint;
 import com.zafu.waterquality.global.GlobalConstants;
+import com.zafu.waterquality.utils.Engine;
+import com.zafu.waterquality.utils.SpUtil;
 import com.zafu.waterquality.utils.blurredview.BlurredView;
 import com.zafu.waterquality.view.RefreshListView;
 
@@ -42,6 +44,9 @@ public class DataTab extends BasePager {
         }
     };
     private BlurredView mBlurredView;
+    private String mProvince;
+    private String mCity;
+    private String mCounty;
 
     public DataTab(Activity activity) {
         super(activity);
@@ -55,6 +60,9 @@ public class DataTab extends BasePager {
         View view = View.inflate(mActivity, R.layout.view_data_tab, null);
         mLvSiteData = (RefreshListView) view.findViewById(R.id.lv_site_data);
         mBlurredView = (BlurredView) view.findViewById(R.id.yahooweather_blurredview);
+
+        //获取当地天气信息
+        getLocalWeather();
 
         //获取数据
         getDataFromService();
@@ -86,6 +94,20 @@ public class DataTab extends BasePager {
         flContent.addView(view);
     }
 
+    /**
+     * 获取当地天气信息
+     */
+    private void getLocalWeather() {
+        mProvince = SpUtil.getString(mActivity, GlobalConstants.PROVINCE, "浙江省");
+        mCity = SpUtil.getString(mActivity, GlobalConstants.CITY, "杭州市");
+        mCounty = SpUtil.getString(mActivity, GlobalConstants.DISTRICT, "临安");
+        Engine.findWeatherURL(mProvince, mCity, mCounty, new Engine.WeatherUrlFinded() {
+            @Override
+            public void success(String finalUrl) {
+                Log.d(TAG, "success: " + finalUrl);
+            }
+        });
+    }
 
 
     private void initLvRefresh() {
