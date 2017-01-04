@@ -7,18 +7,26 @@
 
     <com.zafu.waterquality.utils.blurredview.BlurredView
         android:id="@+id/yahooweather_blurredview"
-        app:src="@drawable/bc"
-        app:move="true"
-        app:disableBlurred="false"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <com.zafu.waterquality.view.RefreshListView
-        android:id="@+id/lv_site_data"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#00000000"
-        android:dividerHeight="0dip"
-        android:listSelector="@android:color/transparent"
-        />
+        app:disableBlurred="false"
+        app:move="true"
+        app:src="@drawable/bc" />
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/weather_title"/>
+
+        <com.zafu.waterquality.view.RefreshListView
+            android:id="@+id/lv_site_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="#00000000"
+            android:dividerHeight="0dp"
+            android:listSelector="@android:color/transparent" />
+    </LinearLayout>
 </FrameLayout>

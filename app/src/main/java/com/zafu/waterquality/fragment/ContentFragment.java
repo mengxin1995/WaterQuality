@@ -44,8 +44,7 @@ public class ContentFragment extends BaseFragment{
         mPagers.add(new Relative(mActivity));
 
         setSlidingMenuEnable(false);
-        //先加载一页数据
-        mPagers.get(0).initData();
+
         vpContent.setAdapter(new VpContent());
         vpContent.setOffscreenPageLimit(2);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

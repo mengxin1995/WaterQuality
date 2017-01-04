@@ -3,10 +3,12 @@ package com.zafu.waterquality.utils;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.zafu.waterquality.db.City;
 import com.zafu.waterquality.db.County;
 import com.zafu.waterquality.db.Province;
 import com.zafu.waterquality.global.GlobalConstants;
+import com.zafu.waterquality.gson.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +33,7 @@ public class Engine {
     private static String mCounty;
     private static Province mSelectProvince;
     private static City mSelectCity;
-    private static WeatherUrlFinded mWeatherUrlFinded;
+    private static WeatherIdFinded mWeatherIdFinded;
     /**
      * 解析和处理服务器返回的省级数据
      * @param response
@@ -107,8 +109,8 @@ public class Engine {
         return false;
     }
 
-    public static void findWeatherURL(String province, String city, String county, WeatherUrlFinded wuf){
-        mWeatherUrlFinded = wuf;
+    public static void findWeatherURL(String province, String city, String county, WeatherIdFinded wuf){
+        mWeatherIdFinded = wuf;
         mProvince = province;
         mCity = city;
         mCounty = county;
@@ -122,9 +124,11 @@ public class Engine {
             for (Province p :
                     provinceLists) {
                 if (mProvince.contains(p.getProvinceName())) {
+                    Log.d(TAG, "queryProvince: 123123123123");
                     List<Province> pro = DataSupport.select("provicecode").where("provincename = ?", p.getProvinceName()).find(Province.class);
                     mSelectProvince = pro.get(0);
                     queryCity(mSelectProvince.getProviceCode());
+                    break;
                 }
             }
         }else{
@@ -141,6 +145,7 @@ public class Engine {
                    List<City> city = DataSupport.select("citycode").where("cityname = ?", c.getCityName()).find(City.class);
                    mSelectCity = city.get(0);
                    queryCounty(mSelectCity.getCityCode());
+                   break;
                }
            }
        }else{
@@ -154,12 +159,9 @@ public class Engine {
             for (County c :
                     countyList) {
                 if (mCounty.contains(c.getCountyName())){
-                    //这里找到最终的url
-                    String finalUrl = GlobalConstants.PROVINCE_URL + "/" + mSelectProvince.getProviceCode()
-                            + "/" + mSelectCity.getCityCode()
-                            + "/" + c.getWeatherId();
-                    Log.d(TAG, "queryCounty: " + finalUrl);
-                    mWeatherUrlFinded.success(finalUrl);
+                    //这里找到最终的weatherId
+                    mWeatherIdFinded.success(c.getWeatherId());
+                    break;
                 }
             }
         }else{
@@ -198,9 +200,19 @@ public class Engine {
         });
     }
 
+    public interface WeatherIdFinded {
+        public void success(String weatherId);
+    }
 
-
-    public interface WeatherUrlFinded{
-        public void success(String finalUrl);
+    public static Weather handleWeatherResponse(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent, Weather.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

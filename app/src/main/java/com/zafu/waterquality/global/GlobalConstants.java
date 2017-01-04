@@ -23,4 +23,6 @@ public class GlobalConstants {
     public static final String CITY = "city";
     public static final String DISTRICT = "district";
     public static final String PROVINCE_URL = "http://guolin.tech/api/china";
+    public static final String WEATHER = "weather";
+    public static final String BING_PIC = "bing_pic";
 }

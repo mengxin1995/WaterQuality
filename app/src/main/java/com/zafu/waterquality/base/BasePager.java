@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -20,6 +21,7 @@ public class BasePager {
     public ImageButton ibMenu;
     public TextView tvTitle;
     public FrameLayout flContent;
+    public RelativeLayout rlTitle;
 
     public BasePager(Activity activity) {
         mActivity = activity;
@@ -31,6 +33,7 @@ public class BasePager {
         ibMenu = (ImageButton) view.findViewById(R.id.ib_menu);
         tvTitle = (TextView) view.findViewById(R.id.tv_title);
         flContent = (FrameLayout) view.findViewById(R.id.fl_content);
+        rlTitle = (RelativeLayout) view.findViewById(R.id.rl_title);
 
         ibMenu.setOnClickListener(new View.OnClickListener() {
             @Override
