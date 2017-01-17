@@ -1,6 +1,7 @@
 package com.zafu.waterquality.base.impl;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.zafu.waterquality.domain.DataPoint;
 import com.zafu.waterquality.global.GlobalConstants;
 import com.zafu.waterquality.gson.Forecast;
 import com.zafu.waterquality.gson.Weather;
+import com.zafu.waterquality.service.AutoUpdateService;
 import com.zafu.waterquality.utils.Engine;
 import com.zafu.waterquality.utils.HttpUtil;
 import com.zafu.waterquality.utils.SpUtil;
@@ -44,6 +46,7 @@ import okhttp3.Response;
 public class DataTab extends BasePager {
 
     private static final String TAG = "DataTab";
+    private static final int REFRESHFINISH = 1;
     private ViewHolder mHolder;
     private RefreshListView mLvSiteData;
     private SiteDataAdapter mSiteDataAdapter;
@@ -51,7 +54,13 @@ public class DataTab extends BasePager {
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            mLvSiteData.refreshComplete(true);
+            switch(msg.what){
+                case REFRESHFINISH:
+                    mLvSiteData.refreshComplete(true);
+                    break;
+                default:
+                    break;
+            }
         }
     };
     private BlurredView mBlurredView;
@@ -96,6 +105,7 @@ public class DataTab extends BasePager {
         mMainview = View.inflate(mActivity, R.layout.view_data_tab, null);
         mLvSiteData = (RefreshListView) mMainview.findViewById(R.id.lv_site_data);
         mBlurredView = (BlurredView) mMainview.findViewById(R.id.yahooweather_blurredview);
+
         //获取数据
         getDataFromService();
         //刷新做什么
@@ -212,6 +222,9 @@ public class DataTab extends BasePager {
         mProvince = SpUtil.getString(mActivity, GlobalConstants.PROVINCE, "浙江省");
         mCity = SpUtil.getString(mActivity, GlobalConstants.CITY, "杭州市");
         mCounty = SpUtil.getString(mActivity, GlobalConstants.DISTRICT, "临安");
+        Log.d(TAG, "getLocalWeather: " + mCounty);
+        Intent intent = new Intent(mActivity, AutoUpdateService.class);
+        mActivity.startService(intent);
         Engine.findWeatherURL(mProvince, mCity, mCounty, new Engine.WeatherIdFinded() {
             @Override
             public void success(String weatherId) {
@@ -253,7 +266,9 @@ public class DataTab extends BasePager {
         mLvSiteData.setOnRefreshListener(new RefreshListView.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                handler.sendEmptyMessageDelayed(111, 2000);
+                //重新获取天气信息
+                getLocalWeather();
+                handler.sendEmptyMessageDelayed(REFRESHFINISH, 2000);
             }
         });
     }
