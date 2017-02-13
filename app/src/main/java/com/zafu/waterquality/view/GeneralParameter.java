@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.zafu.waterquality.global.GlobalConstants;
@@ -80,7 +79,7 @@ public class GeneralParameter extends View{
         //得到长宽
         viewWidth = getWidth() ;
         viewHeight = getHeight() ;
-        Log.i("ViewHei", viewHeight+"GeneralParameter") ;
+        //Log.i("ViewHei", viewHeight+"GeneralParameter") ;
         //画透明背景
         int color = Color.rgb(110,112,120) ;
         paint.setColor(color);
@@ -136,7 +135,7 @@ public class GeneralParameter extends View{
                     //下面是读取，可以用connection带的方法，获取输入流
                     InputStream inStream = connection.getInputStream() ;
                     BufferedReader reader = new BufferedReader(new InputStreamReader(inStream)) ;
-                    Log.i(TAG, "我到了");
+                    //Log.i(TAG, "我到了");
                     String line = "";
                     int count = 0 ;
                     double phCount =0 ,tempCount = 0 ,oxyGasCount = 0 ;

@@ -8,7 +8,6 @@ import android.graphics.Point;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.zafu.waterquality.domain.MyPoint;
@@ -38,7 +37,7 @@ public class UnGeneralParameter extends View {
             //canvas.drawText(str.toString(), 340, 440, paint);
             paint.setStrokeWidth((float) 6.0);
             invalidate() ;
-            Log.i("XValue", "VIEWoneINit") ;
+            //Log.i("XValue", "VIEWoneINit") ;
         }
     };;
     private Timer mTimer ;
@@ -82,7 +81,7 @@ public class UnGeneralParameter extends View {
         viewWidth = getWidth() ;
         viewHeight = getHeight() ;
 
-        Log.i("ViewHei", viewHeight+"UnGeneralParameter") ;
+        //Log.i("ViewHei", viewHeight+"UnGeneralParameter") ;
 
         //int viewHeight = getHeight() ;
         //Log.i("viewWidValue", viewWidth+"-"+getWidth()) ;
@@ -187,9 +186,9 @@ public class UnGeneralParameter extends View {
                     dataPoints.clear() ;
                     dataChangePoint.clear() ;
                     double elemX = ( viewWidth*0.8 )*1.0 / 288 ;
-                    Log.i("xValue", elemX+"") ;
+                    //Log.i("xValue", elemX+"") ;
                     double everY = viewHeight*0.718/36 ;
-                    Log.i("asd", everY+"") ;
+                    //Log.i("asd", everY+"") ;
                     while((line=reader.readLine())!=null && count <=24*12){
                         if(count == 0)
                         {

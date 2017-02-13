@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.zafu.waterquality.R;
+import com.zafu.waterquality.RxjavaRetrofit.entity.WaterData;
+import com.zafu.waterquality.RxjavaRetrofit.http.HttpMethods;
+import com.zafu.waterquality.RxjavaRetrofit.subscribers.SimpleHttpSubscriber;
+import com.zafu.waterquality.RxjavaRetrofit.subscribers.SubscriberOnNextListener;
 import com.zafu.waterquality.base.BasePager;
 import com.zafu.waterquality.domain.DataPoint;
 import com.zafu.waterquality.global.GlobalConstants;
@@ -28,13 +31,9 @@ import com.zafu.waterquality.utils.ToastUtil;
 import com.zafu.waterquality.utils.blurredview.BlurredView;
 import com.zafu.waterquality.view.RefreshListView;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -222,7 +221,7 @@ public class DataTab extends BasePager {
         mProvince = SpUtil.getString(mActivity, GlobalConstants.PROVINCE, "浙江省");
         mCity = SpUtil.getString(mActivity, GlobalConstants.CITY, "杭州市");
         mCounty = SpUtil.getString(mActivity, GlobalConstants.DISTRICT, "临安");
-        Log.d(TAG, "getLocalWeather: " + mCounty);
+        //Log.d(TAG, "getLocalWeather: " + mCounty);
         Intent intent = new Intent(mActivity, AutoUpdateService.class);
         mActivity.startService(intent);
         Engine.findWeatherURL(mProvince, mCity, mCounty, new Engine.WeatherIdFinded() {
@@ -274,45 +273,25 @@ public class DataTab extends BasePager {
     }
 
     private void getDataFromService() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(GlobalConstants.SITE_URL);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    //服务器的常用的两个方法,post,get
-                    connection.setRequestMethod("GET");
-                    //链接超时,读取超时，根据自己情况定
-                    connection.setConnectTimeout(8000);
-                    connection.setReadTimeout(8000);
-                    //下面是读取，可以用connection带的方法，获取输入流
-                    InputStream inStream = connection.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(inStream));
-                    mSiteDataLists.clear();
-                    String line = null;
-                    int count = 0;
-                    while ((line = reader.readLine()) != null) {
-                        if (count == 0) {
-                            count++;
-                            continue;
-                        }
-                        String item[] = line.split(",");
+
+        HttpMethods.getInstance().getTodayWaterData(new SimpleHttpSubscriber<List<WaterData>>(
+                new SubscriberOnNextListener<List<WaterData>>() {
+                    @Override
+                    public void onNext(List<WaterData> waterDatas) {
                         DataPoint elem = new DataPoint();
-                        elem.setPonitName(item[0]);
-                        Log.i("name", item[0]);
-                        elem.setOxgasValue(Double.parseDouble(item[1]));
-                        elem.setPhValue(Double.parseDouble(item[3]));
-                        elem.setTempVale(Double.parseDouble(item[4]));
-                        elem.setnValue(Double.parseDouble(item[2]) * 1000);
-                        elem.setZhouValue(Double.parseDouble(item[5]));
+                        WaterData waterData = waterDatas.get(waterDatas.size() - 1);
+                        elem.setPonitName("浙江农大");
+                        //Log.i("name", item[0]);
+                        elem.setOxgasValue(Double.parseDouble("11.1"));
+                        elem.setPhValue(waterData.getPh());
+                        elem.setTempVale(waterData.getShuiWen());
+                        elem.setnValue(11);
+                        elem.setZhouValue(11);
+                        mSiteDataLists.clear();
+                        mSiteDataLists.add(elem);
                         mSiteDataLists.add(elem);
                     }
-                    connection.disconnect();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+                }));
     }
 
     private class SiteDataAdapter extends BaseAdapter {

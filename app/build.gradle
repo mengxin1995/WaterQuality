@@ -28,7 +28,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile project(':SlidingMenuLibrary')
-    compile 'com.google.code.gson:gson:2.2.4'
     compile files('libs/baidumapapi_cloud_v4_0_0.jar')
     compile files('libs/locSDK_6.13.jar')
     compile 'com.jakewharton:butterknife:8.4.0'
@@ -37,4 +36,12 @@ dependencies {
     compile 'org.litepal.android:core:1.4.1'
     compile 'com.squareup.okhttp3:okhttp:3.5.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    //RxjavaRetrofit
+    compile 'io.reactivex:rxjava:1.1.0'
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta4'
+    compile 'com.google.code.gson:gson:2.6.2'
+
 }
