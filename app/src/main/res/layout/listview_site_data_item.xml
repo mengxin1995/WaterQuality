@@ -46,17 +46,6 @@
             android:text="水温"
             android:layout_weight="1"
             style="@style/lv_site_data_item" />
-
-        <TextView
-            android:id="@+id/tv_col_name7"
-            android:text="氨氮"
-            android:layout_weight="1"
-            style="@style/lv_site_data_item" />
-        <TextView
-            android:id="@+id/tv_col_name8"
-            android:text="水位"
-            android:layout_weight="1"
-            style="@style/lv_site_data_item" />
     </LinearLayout>
 
     <LinearLayout
@@ -95,14 +84,6 @@
 
         <TextView
             android:id="@+id/tv_col6"
-            android:layout_weight="1"
-            style="@style/lv_site_data_item" />
-        <TextView
-            android:id="@+id/tv_col7"
-            android:layout_weight="1"
-            style="@style/lv_site_data_item" />
-        <TextView
-            android:id="@+id/tv_col8"
             android:layout_weight="1"
             style="@style/lv_site_data_item" />
     </LinearLayout>
