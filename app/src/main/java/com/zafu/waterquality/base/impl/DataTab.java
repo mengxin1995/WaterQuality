@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -279,7 +278,6 @@ public class DataTab extends BasePager {
         HttpMethods.getInstance().getWaterData(new SimpleHttpSubscriber<List<WaterData>>(new SubscriberOnNextListener<List<WaterData>>() {
             @Override
             public void onNext(List<WaterData> waterDatas) {
-                Log.d(TAG, "onNext: " + waterDatas.size());
                 DataSite elem = new DataSite();
                 WaterData waterData = waterDatas.get(waterDatas.size() - 1);
                 elem.setSiteName("浙农大");
