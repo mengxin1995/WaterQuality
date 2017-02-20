@@ -291,6 +291,7 @@ public class DataTab extends BasePager {
                 mSiteDataLists.clear();
                 mSiteDataLists.add(elem);
                 mSiteDataLists.add(elem);
+                mSiteDataAdapter.notifyDataSetChanged();
             }
         }), 0, TimeUtils.getNowTimeString(DEFAULT_PATTERN));
     }
