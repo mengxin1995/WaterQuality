@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +14,14 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.utils.TimeUtils;
 import com.zafu.waterquality.R;
 import com.zafu.waterquality.RxjavaRetrofit.entity.WaterData;
 import com.zafu.waterquality.RxjavaRetrofit.http.HttpMethods;
 import com.zafu.waterquality.RxjavaRetrofit.subscribers.SimpleHttpSubscriber;
 import com.zafu.waterquality.RxjavaRetrofit.subscribers.SubscriberOnNextListener;
 import com.zafu.waterquality.base.BasePager;
-import com.zafu.waterquality.domain.DataPoint;
+import com.zafu.waterquality.domain.DataSite;
 import com.zafu.waterquality.global.GlobalConstants;
 import com.zafu.waterquality.gson.Forecast;
 import com.zafu.waterquality.gson.Weather;
@@ -44,12 +46,13 @@ import okhttp3.Response;
  */
 public class DataTab extends BasePager {
 
+    public static final String DEFAULT_PATTERN = "yyyy:MM:dd";
     private static final String TAG = "DataTab";
     private static final int REFRESHFINISH = 1;
     private ViewHolder mHolder;
     private RefreshListView mLvSiteData;
     private SiteDataAdapter mSiteDataAdapter;
-    private ArrayList<DataPoint> mSiteDataLists = new ArrayList<DataPoint>();
+    private ArrayList<DataSite> mSiteDataLists = new ArrayList<DataSite>();
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -273,25 +276,23 @@ public class DataTab extends BasePager {
     }
 
     private void getDataFromService() {
-
-        HttpMethods.getInstance().getTodayWaterData(new SimpleHttpSubscriber<List<WaterData>>(
-                new SubscriberOnNextListener<List<WaterData>>() {
-                    @Override
-                    public void onNext(List<WaterData> waterDatas) {
-                        DataPoint elem = new DataPoint();
-                        WaterData waterData = waterDatas.get(waterDatas.size() - 1);
-                        elem.setPonitName("浙江农大");
-                        //Log.i("name", item[0]);
-                        elem.setOxgasValue(Double.parseDouble("11.1"));
-                        elem.setPhValue(waterData.getPh());
-                        elem.setTempVale(waterData.getShuiWen());
-                        elem.setnValue(11);
-                        elem.setZhouValue(11);
-                        mSiteDataLists.clear();
-                        mSiteDataLists.add(elem);
-                        mSiteDataLists.add(elem);
-                    }
-                }));
+        HttpMethods.getInstance().getWaterData(new SimpleHttpSubscriber<List<WaterData>>(new SubscriberOnNextListener<List<WaterData>>() {
+            @Override
+            public void onNext(List<WaterData> waterDatas) {
+                Log.d(TAG, "onNext: " + waterDatas.size());
+                DataSite elem = new DataSite();
+                WaterData waterData = waterDatas.get(waterDatas.size() - 1);
+                elem.setSiteName("浙农大");
+                elem.setPh(waterData.getPh());
+                elem.setDianDaoLv(waterData.getDianDaoLv());
+                elem.setShuiWen(waterData.getShuiWen());
+                elem.setAnDan(waterData.getAnDan());
+                elem.setRongJieYang(waterData.getRongJieYang());
+                mSiteDataLists.clear();
+                mSiteDataLists.add(elem);
+                mSiteDataLists.add(elem);
+            }
+        }), 0, TimeUtils.getNowTimeString(DEFAULT_PATTERN));
     }
 
     private class SiteDataAdapter extends BaseAdapter {
@@ -323,8 +324,6 @@ public class DataTab extends BasePager {
                 mHolder.tv_col_name4 = (TextView) convertView.findViewById(R.id.tv_col_name4);
                 mHolder.tv_col_name5 = (TextView) convertView.findViewById(R.id.tv_col_name5);
                 mHolder.tv_col_name6 = (TextView) convertView.findViewById(R.id.tv_col_name6);
-                mHolder.tv_col_name7 = (TextView) convertView.findViewById(R.id.tv_col_name7);
-                mHolder.tv_col_name8 = (TextView) convertView.findViewById(R.id.tv_col_name8);
 
                 mHolder.tv_col1 = (TextView) convertView.findViewById(R.id.tv_col1);
                 mHolder.tv_col2 = (TextView) convertView.findViewById(R.id.tv_col2);
@@ -332,35 +331,35 @@ public class DataTab extends BasePager {
                 mHolder.tv_col4 = (TextView) convertView.findViewById(R.id.tv_col4);
                 mHolder.tv_col5 = (TextView) convertView.findViewById(R.id.tv_col5);
                 mHolder.tv_col6 = (TextView) convertView.findViewById(R.id.tv_col6);
-                mHolder.tv_col7 = (TextView) convertView.findViewById(R.id.tv_col7);
-                mHolder.tv_col8 = (TextView) convertView.findViewById(R.id.tv_col8);
                 convertView.setTag(mHolder);
             } else {
                 mHolder = (ViewHolder) convertView.getTag();
             }
 
-            DataPoint dataPoint = mSiteDataLists.get(position);
+            DataSite dataSite = mSiteDataLists.get(position);
 
-            mHolder.tv_col_name1.setText("ZAFU");
-            mHolder.tv_col_name2.setText("THM");
-            mHolder.tv_col_name3.setText("PH");
-            mHolder.tv_col_name4.setText("CTD");
-            mHolder.tv_col_name5.setText("O2");
-           // mHolder.tv_col_name6.setText("WTMP");
-           // mHolder.tv_col_name7.setText("WTMP");
-          //  mHolder.tv_col_name8.setText("WTMP");
+            //站点
+            mHolder.tv_col_name1.setText("站点");
+            //PH
+            mHolder.tv_col_name2.setText("PH");
+            //电导率
+            mHolder.tv_col_name3.setText("电导率");
+            //水温
+            mHolder.tv_col_name4.setText("水温");
+            //氨氮
+            mHolder.tv_col_name5.setText("氨氮");
+            //溶解氧
+            mHolder.tv_col_name6.setText("溶解氧");
 
-            //mHolder.tv_col1.setText("");
-            mHolder.tv_col2.setText(dataPoint.getnValue() + "");
-            mHolder.tv_col3.setText(dataPoint.getOxgasValue() + "");
-            mHolder.tv_col4.setText(dataPoint.getPhValue() + "");
-            mHolder.tv_col5.setText(dataPoint.getTempVale() + "");
-            mHolder.tv_col6.setText(dataPoint.getZhouValue() + "");
-            mHolder.tv_col7.setText(dataPoint.getZhouValue() + "");
-            mHolder.tv_col8.setText(dataPoint.getZhouValue() + "");
+
+            mHolder.tv_col1.setText(dataSite.getSiteName() + "");
+            mHolder.tv_col2.setText(dataSite.getPh() + "");
+            mHolder.tv_col3.setText(dataSite.getDianDaoLv() + "");
+            mHolder.tv_col4.setText(dataSite.getShuiWen() + "");
+            mHolder.tv_col5.setText(dataSite.getAnDan() + "");
+            mHolder.tv_col6.setText(dataSite.getRongJieYang() + "");
             return convertView;
         }
-
     }
 
     private void setPadding(View convertView) {
@@ -376,16 +375,11 @@ public class DataTab extends BasePager {
         public TextView tv_col4;
         public TextView tv_col5;
         public TextView tv_col6;
-        public TextView tv_col7;
-        public TextView tv_col8;
         public TextView tv_col_name1;
         public TextView tv_col_name2;
         public TextView tv_col_name3;
         public TextView tv_col_name4;
         public TextView tv_col_name5;
         public TextView tv_col_name6;
-        public TextView tv_col_name7;
-        public TextView tv_col_name8;
-
     }
 }

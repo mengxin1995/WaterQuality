@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.blankj.utilcode.utils.Utils;
 
 import org.litepal.LitePalApplication;
 
@@ -25,6 +26,7 @@ public class WaterQualityApplication extends Application{
         handler = new Handler();
         mainThreadId = android.os.Process.myTid();
         LitePalApplication.initialize(context);
+        Utils.init(context);
     }
 
     public static Context getContext() {
