@@ -2,9 +2,9 @@ package com.zafu.waterquality.base.impl;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +15,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.utils.TimeUtils;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.zafu.waterquality.R;
 import com.zafu.waterquality.RxjavaRetrofit.entity.WaterData;
 import com.zafu.waterquality.RxjavaRetrofit.http.HttpMethods;
@@ -40,6 +49,8 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+
+import static com.zafu.waterquality.R.id.chart;
 
 /**
  * Created by mengxin on 16-10-2.
@@ -92,6 +103,7 @@ public class DataTab extends BasePager {
 
     private TextView sportText;
     private View mMainview;
+    private LineChart mChart;
 
     public DataTab(Activity activity) {
         super(activity);
@@ -118,7 +130,11 @@ public class DataTab extends BasePager {
         //天气预报板块添加
         initWeatherUI();
         mLvSiteData.addHeaderView(View.inflate(mActivity, R.layout.view_general_parameter, null));
-        mLvSiteData.addHeaderView(View.inflate(mActivity, R.layout.view_ungeneral_parameter, null));
+        View chartView = View.inflate(mActivity, R.layout.view_ungeneral_parameter, null);
+        setPadding(chartView);
+        mLvSiteData.addHeaderView(chartView);
+        mChart = (LineChart) chartView.findViewById(chart);
+        fillChart();
         mLvSiteData.addHeaderView(View.inflate(mActivity, R.layout.listview_site_data_item_head, null));
         mLvSiteData.setAdapter(mSiteDataAdapter);
 
@@ -138,6 +154,70 @@ public class DataTab extends BasePager {
             }
         });
         flContent.addView(mMainview);
+    }
+
+    private void fillChart() {
+        HttpMethods.getInstance().getWaterData(new SimpleHttpSubscriber<List<WaterData>>(new SubscriberOnNextListener<List<WaterData>>() {
+            @Override
+            public void onNext(List<WaterData> waterDatas) {
+                List<Entry> entries = new ArrayList<Entry>();
+                for (WaterData w :
+                        waterDatas) {
+                    String t = w.getTime();
+                    String[] split = t.split(":");
+                    float time = Float.parseFloat(split[0]) * 60 + Float.parseFloat(split[1]);
+                    float anDan = w.getAnDan();
+                    entries.add(new Entry(time, anDan));
+                }
+
+                LineDataSet dataSet = new LineDataSet(entries, "非常规参数--氨氮"); // add entries to dataset
+                dataSet.setColor(Color.BLUE);
+                dataSet.setValueTextColor(Color.WHITE); // styling, ...
+                LineData lineData = new LineData(dataSet);
+                mChart.setData(lineData);
+                //设置描述信息
+                Description mChartDescription = new Description();
+//                mChartDescription.setText("非常规参数--氨氮");
+//                mChartDescription.setTextSize(15);
+//                mChartDescription.setTextColor(mActivity.getResources().getColor(R.color.textColor));
+                mChartDescription.setEnabled(false);
+                mChart.setDescription(mChartDescription);
+
+
+                //设置x轴坐标
+                XAxis xAxis = mChart.getXAxis();
+                xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                xAxis.setDrawAxisLine(true);
+                xAxis.setDrawGridLines(true);
+                xAxis.setDrawAxisLine(true);
+                xAxis.setEnabled(true);
+                xAxis.setAxisLineWidth(2f);
+                xAxis.setTextColor(mActivity.getResources().getColor(R.color.textColor));
+                xAxis.setLabelCount(7);
+                // the labels that should be drawn on the XAxis
+                final String[] quarters = new String[] { "0h", "1h", "2h", "3h",
+                "4h", "5h", "6h", "7h", "8h", "9h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h", "18h",
+                "19h", "20h", "21h", "22h", "23h", "24h"};
+                IAxisValueFormatter formatter = new IAxisValueFormatter() {
+                    @Override
+                    public String getFormattedValue(float value, AxisBase axis) {
+                        return quarters[(int) value / 60];
+                    }
+                };
+                xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+                xAxis.setValueFormatter(formatter);
+
+                //设置Y轴属性
+                YAxis leftAxis = mChart.getAxisLeft();
+                leftAxis.setAxisLineWidth(2f);
+                leftAxis.setTextColor(mActivity.getResources().getColor(R.color.textColor));
+                YAxis rightAxis = mChart.getAxisRight();
+                rightAxis.setAxisLineWidth(2f);
+                rightAxis.setTextColor(mActivity.getResources().getColor(R.color.textColor));
+
+                mChart.invalidate(); // refresh
+            }
+        }), 0, TimeUtils.getNowTimeString(DEFAULT_PATTERN));
     }
 
     /**
@@ -270,6 +350,12 @@ public class DataTab extends BasePager {
             public void onRefresh() {
                 //重新获取天气信息
                 getLocalWeather();
+                //重新获取常规参数
+
+                //重新获取非常规参数
+                fillChart();
+                //重新获取站点数据
+                getDataFromService();
                 handler.sendEmptyMessageDelayed(REFRESHFINISH, 2000);
             }
         });
@@ -279,7 +365,6 @@ public class DataTab extends BasePager {
         HttpMethods.getInstance().getWaterData(new SimpleHttpSubscriber<List<WaterData>>(new SubscriberOnNextListener<List<WaterData>>() {
             @Override
             public void onNext(List<WaterData> waterDatas) {
-                Log.d(TAG, "onNext: " + waterDatas.size());
                 DataSite elem = new DataSite();
                 WaterData waterData = waterDatas.get(waterDatas.size() - 1);
                 elem.setSiteName("浙农大");
@@ -300,7 +385,7 @@ public class DataTab extends BasePager {
 
         @Override
         public int getCount() {
-            return 2;
+            return mSiteDataLists.size();
         }
 
         @Override
