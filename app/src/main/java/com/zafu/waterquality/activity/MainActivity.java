@@ -3,13 +3,10 @@ package com.zafu.waterquality.activity;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -35,30 +32,15 @@ import java.util.List;
 
 public class MainActivity extends SlidingFragmentActivity {
     private static final String TAG = "MainActivity";
-    private static final int REFRESH_COMPLETE = 1;
+
     private SlidingMenu mSlidingMenu;
     private FragmentManager mSupportFragmentManager;
-
     public LocationClient mLocationClient;
-    private MapView mMapView = null;
-    private View mViewPointTab;
-    private SwipeRefreshLayout mSwipeLayout;
-    private Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            switch(msg.what){
-                case REFRESH_COMPLETE:
-                    mSwipeLayout.setRefreshing(false);
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         mLocationClient = new LocationClient(getApplicationContext());
         mLocationClient.registerLocationListener(new MyLocationListener());
@@ -77,6 +59,7 @@ public class MainActivity extends SlidingFragmentActivity {
 
         initFragment();
     }
+
 
     /**
      * 获取当前位置
@@ -178,6 +161,7 @@ public class MainActivity extends SlidingFragmentActivity {
         if(mLocationClient != null){
             mLocationClient.stop();
         }
+
     }
 
     @Override
