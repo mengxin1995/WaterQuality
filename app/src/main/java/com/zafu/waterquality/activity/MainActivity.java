@@ -35,12 +35,12 @@ public class MainActivity extends SlidingFragmentActivity {
 
     private SlidingMenu mSlidingMenu;
     private FragmentManager mSupportFragmentManager;
-
     public LocationClient mLocationClient;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         mLocationClient = new LocationClient(getApplicationContext());
         mLocationClient.registerLocationListener(new MyLocationListener());
@@ -59,6 +59,7 @@ public class MainActivity extends SlidingFragmentActivity {
 
         initFragment();
     }
+
 
     /**
      * 获取当前位置
@@ -160,6 +161,7 @@ public class MainActivity extends SlidingFragmentActivity {
         if(mLocationClient != null){
             mLocationClient.stop();
         }
+
     }
 
     @Override

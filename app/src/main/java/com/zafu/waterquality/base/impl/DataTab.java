@@ -31,6 +31,7 @@ import com.zafu.waterquality.RxjavaRetrofit.subscribers.SimpleHttpSubscriber;
 import com.zafu.waterquality.RxjavaRetrofit.subscribers.SubscriberOnNextListener;
 import com.zafu.waterquality.base.BasePager;
 import com.zafu.waterquality.domain.DataSite;
+import com.zafu.waterquality.global.Event;
 import com.zafu.waterquality.global.GlobalConstants;
 import com.zafu.waterquality.gson.Forecast;
 import com.zafu.waterquality.gson.Weather;
@@ -41,6 +42,8 @@ import com.zafu.waterquality.utils.SpUtil;
 import com.zafu.waterquality.utils.ToastUtil;
 import com.zafu.waterquality.utils.blurredview.BlurredView;
 import com.zafu.waterquality.view.RefreshListView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -352,12 +355,11 @@ public class DataTab extends BasePager {
                 //重新获取天气信息
                 getLocalWeather();
                 //重新获取常规参数
-
+                EventBus.getDefault().post(new Event.RefreshEventGeneralParameter(true));
                 //重新获取非常规参数
                 fillChart();
-                //重新获取站点数据
+                //重新获取站点数据(这里进行判定刷新结束)
                 getDataFromService();
-                handler.sendEmptyMessageDelayed(REFRESHFINISH, 2000);
             }
         });
     }
@@ -378,6 +380,7 @@ public class DataTab extends BasePager {
                 mSiteDataLists.add(elem);
                 mSiteDataLists.add(elem);
                 mSiteDataAdapter.notifyDataSetChanged();
+                handler.sendEmptyMessageDelayed(REFRESHFINISH, 0);
             }
         }), 0, TimeUtils.getNowTimeString(DEFAULT_PATTERN));
     }
