@@ -12,6 +12,11 @@ import com.zafu.waterquality.RxjavaRetrofit.entity.WaterData;
 import com.zafu.waterquality.RxjavaRetrofit.http.HttpMethods;
 import com.zafu.waterquality.RxjavaRetrofit.subscribers.SimpleHttpSubscriber;
 import com.zafu.waterquality.RxjavaRetrofit.subscribers.SubscriberOnNextListener;
+import com.zafu.waterquality.global.Event;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -50,7 +55,9 @@ public class GeneralParameter extends View{
         greenLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG) ;
         yellowLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG) ;
         init() ;
+        EventBus.getDefault().register(this);
     }
+
 
     public void init(){
         mTimer = new Timer() ;
@@ -113,5 +120,16 @@ public class GeneralParameter extends View{
         canvas.drawText("溶解氧", (float)(viewWidth*0.59), (float) (viewHeight*0.735), paint);
         canvas.drawText("" + waterData.getRongJieYang(), (float)(viewWidth*0.79), (float) (viewHeight*0.735), paint);
         canvas.drawLine((float)(viewWidth*0.59), (float) (viewHeight*0.85), (float)(viewWidth*0.89), (float) (viewHeight*0.85), greenLinePaint);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(Event.RefreshEventGeneralParameter event) {
+        DoTask();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        EventBus.getDefault().unregister(this);
     }
 }

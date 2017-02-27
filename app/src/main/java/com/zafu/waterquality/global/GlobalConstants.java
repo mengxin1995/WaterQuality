@@ -29,4 +29,5 @@ public class GlobalConstants {
      * 站点Url
      */
     public static final String SITE_BASE_URL = "http://115.236.84.154/";
+
 }
